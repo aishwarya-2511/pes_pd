@@ -1,5 +1,3 @@
-# pes_pd
-
 
 # ADVANCED PHYSICAL DESIGN USING OPENLANE/SKY130
 
@@ -22,7 +20,6 @@ Inception of open-source EDA, OpenLANE and Sky130 PDK
     * OpenLANE Directory structure in detail
     * Design Preparation Step
     * Review files after design prep and run synthesis
-    * OpenLANE Project Link Description
     * Steps to characterize synthesis results
 ## DAY 2
 Good vs Bad floorplan and introduction to library cells
@@ -118,3 +115,92 @@ Final steps for RTL2GDS using tritonroute and OpenSTA
     * TritonRoute Feature2 & 3 - Inter-guide connectivity and intra- & inter-layer routing
     * TritonRoute method to handle connectivity
     * Routing topology algorithm and final files list post-route
+## DAY 1
+## Inception of open-source EDA, OpenLANE and Sky130 PDK
+### How to talk to computers
+#### Introduction to QFN-48 Package,chip,pads,core,die and IPs
+* Take the example of an Arduino board, it is a small computer chip that processes instructions and controls the behavior of electronics
+Block diagram of the board:
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/Screenshot%202023-09-16%20130614.png)
+The IC:
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/Screenshot%202023-09-16%20130736.png)
+Parts:
+* PADs : the metal points on the bottom of the chipthat are used to connect the chip to a circuit through signal can be sent into the chip.
+* Core : central part that processes the information.Its a place where all our Digital logical sits like the AND gate,OR gate,MUXs.
+* Die : a tiny, flat piece of silicon that contains the actual electronic circuits and defines the size of the chip, its manufactured on a Silicon wafer.
+* The SRAM,ADC,DAC,PLL are known As Foundry IP's.
+* The SoC and the SPI are basically called as Macros.
+
+#### Introduction to RISC-V
+* "RISC-V intruction set architecture" popularly known as "ISA".Its a language of the computer,a way through which we are able to talk and communicate with the computers.
+* For a C program to run on a computer hardware it is first compiled in its assembly language program which is nothing but the RISC-V assembly language program.
+* This  is then converted into machine language program aka the binary language program(ie: 1's and 0's) which is understood by the hardware of the computer.
+* Aafter converting these bits gets finnaly executed in the layout and get the required output.
+
+#### From software Applications to Hardware
+1. Apps: A computer software that is designed to perform specific tasks or functions for end-users.
+
+2. System software: Refers to a category of computer software that acts as an intermediary between the hardware components of a computer system and the user-facing application software. 
+
+3. Operating System: The operating system is a fundamental piece of software that controls memory management, process scheduling, file system management, and user interface interaction.
+
+4. Compiler: A compiler is a type of software tool that translates high-level programming code written by developers into assembly-level language.
+
+5. Assembler: An assembler is a software tool that translates assembly language code into machine code or binary code that can be directly executed by a computer's processor.
+
+6. RTL: RTL serves as an abstraction level in the design process that represents the behavior of a digital circuit in terms of registers and the operations that transfer data between them.
+
+7. Hardware: Hardware refers to the physical components of a computer system or any electronic device. 
+
+### SoC design and OpenLANE
+#### Introduction to all components of open-source digital asic design
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/Screenshot%202023-09-16%20132452.png)
+To implement Digital ASIC design we require certain elements these elements:
+* PDK is a set of files provided by semiconductor manufacturers to help designers use their fabrication process to create integrated circuits (ICs). It contains a comprehensive set of information, models, and files that enable designers to develop and verify their designs using the specific process technology offered by the manufacturer.
+* EDA tools refer to a category of software applications and tools used in the design and development of electronic systems, including integrated circuits (ICs), printed circuit boards (PCBs), and other electronic components.EDA tools are essential for designing and testing electronic hardware and ensuring that it functions correctly before it is manufactured.
+* Register-Transfer Level tools:  a level of abstraction used in digital circuit design and describes how data moves between registers and how operations are performed on that data.In RTL design, the behavior of the digital system is defined by describing how data is transferred between registers and how operations are performed on that data. 
+
+#### Simplified RTL2GDS flow
+RTL to GDSII Flow:
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/Screenshot%202023-09-16%20132350.png)
+* Synthesis - Converts RTL to a ciruit, out of compomments from the standard cell library.
+* Floor and Power Planning - Obejctive here is to plan the silicon area and create robust power distribution network to power the chip.
+* Chip Floor Planning - Partition the chip die between different system building blocks and place the I/O pads.
+* Macro Floor Planning - We define the macro dimensions, pin locations and rows are defined.
+* Power Planning - The power distribution network is contructed.
+* Placement - Placing the cells on the floorplan rows, aligned with the sites. There are 2 steps: Global and Detailed.
+* Clock Tree Synthesis - To deliver the clock to all sequential elements.
+* Routing - Implement the interconnect using the available metal layers.
+* Sign Off - Perform physical verification such as DRC(Design Rule Check) and LVS(Layout vs Synthesis). Also perform STA(Static Timiing Analysis).
+
+#### Introduction to OpenLANE and strive chipsets
+OpenLane is an open-source digital ASIC (Application-Specific Integrated Circuit) design flow framework.esigned to automate the process of designing and fabricating digital integrated circuits. OpenLane aims to make custom ASIC design more accessible to a broader range of engineers and researchers.
+
+#### Introduction to OpenLANE detailed ASIC design flow
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/Screenshot%202023-09-16%20134121.png)
+
+### Get familiar to open-source EDA tools
+#### OpenLANE Directory structure in detail
+The detailed directory structure can be seen here:
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/VirtualBox_vsdworkshop_16_09_2023_21_38_06.png)
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/VirtualBox_vsdworkshop_16_09_2023_21_38_28.png)
+
+#### Design Preparation Step
+To work on Openlane type docker in the openlane directory.
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/VirtualBox_vsdworkshop_16_09_2023_21_44_46.png)
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/VirtualBox_vsdworkshop_16_09_2023_21_46_21.png)
+
+#### Review files after design prep and run synthesis
+To view details of different files:
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/review.png)
+To run synthesis:
+```bash
+run_synthesis 
+```
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/synth.png)
+#### Steps to characterize synthesis results
+The flop ratio can be calculated by using:
+No. of flops/No. of cells = 1613/14876 = 0.108
+
+Netlist is generated in the runs folder
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/Screenshot%202023-09-16%20221427.png)
