@@ -25,11 +25,12 @@ Inception of open-source EDA, OpenLANE and Sky130 PDK
 Good vs Bad floorplan and introduction to library cells
 * Chip floorplanning considerations
     * Utilization factor and aspect ratio
-    * Concept of pre-places cells
+    * Concept of pre-placed cells
     * De-coupling capacitors
     * Power planning
     * Pin placement and logical cell placement blockage
     * Steps to run floorplan using OpenLANE
+    * Review floorplan files and steps to review floorplan
     * Review floorplan layout in Magic
 * Library Binding and Placement
     * Netlist binding and initial place design
@@ -187,6 +188,12 @@ The detailed directory structure can be seen here:
 
 #### Design Preparation Step
 To work on Openlane type docker in the openlane directory.
+Also type:
+```bash
+./flow.tcl -interactive
+package require openlane 0.9
+prep -design picorv32a
+```
 ![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/VirtualBox_vsdworkshop_16_09_2023_21_44_46.png)
 ![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/VirtualBox_vsdworkshop_16_09_2023_21_46_21.png)
 
@@ -204,3 +211,144 @@ No. of flops/No. of cells = 1613/14876 = 0.108
 
 Netlist is generated in the runs folder
 ![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/Screenshot%202023-09-16%20221427.png)
+
+## DAY 2
+Good vs Bad floorplan and introduction to library cells
+### Chip floorplanning considerations
+#### Utilization factor and aspect ratio
+Define Width and height of core and die: The die refers to the entire semiconductor chip, including the core, I/O pads, and any additional features.
+Utilisation factor plays an important role in floor planning. It is given by: Area occupied by netlist/area of the core
+Aspect ratio=Height/Width
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/Screenshot%202023-09-16%20230909.png)
+#### Concept of pre-placed cells
+We split the circuit into two parts, block 1 and block 2 
+We extend the I/O pins and black box the boxes.
+Now we separate the boxes and the get their respective I/O ports.
+The use of doing this is that the users can use the blocks multiple times and form the required final circuit with ease.
+They only need to implement the design once and it can be reused.
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/Screenshot%202023-09-16%20231215.png)
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/Screenshot%202023-09-16%20231222.png)
+
+#### De-coupling capacitors
+Everytime the circuit switches it draws current from the decoupling capacitor, whereas the outer network with the power supply and other componets is used to re-charge the capacitor
+Decoupling capacitors store and discharge electrical energy quickly or decoupling capacitors absorb excess charge to filter out high- frequency noise and transient voltage fluctuations.
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/Screenshot%202023-09-16%20231829.png)
+
+#### Power planning
+When a transition occurs on a net, charge associated with coupling capacitors may be dumped to ground. If there are not enough ground taps charge will accumulate at the tap and the ground line will act like a large resistor, raising the ground voltage and lowering our noise margin. To bypass this problem a robust PDN with many power strap taps are needed to lower the resistance associated with the PDN.
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/Screenshot%202023-09-16%20232356.png)
+
+#### Pin placement and logical cell placement blockage
+Pin placement is an essential part of floorplanning to minimize buffering and improve power consumption and timing delays we use the HDL netlist to determine where a specific pin should be placed in the circuit. We join the common pins and try to keep the connections as effecient as possible.
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/Screenshot%202023-09-16%20232842.png)
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/Screenshot%202023-09-16%20232903.png)
+
+#### Steps to run floorplan using OpenLANE
+Go to the directory:
+```bash
+cd Desktop/work/tools/openlane_working_dir/openlane/configuration
+```
+```bash
+less README.md
+```
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/openlaner.png)
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/openlanerr.png)
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/openlanerrr.png)
+
+Now to run floorplan, in openlane:
+```bash
+run_floorplan
+```
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/floorplan.png)
+
+#### Review floorplan files and steps to review floorplan
+Go to runs folder and check logs folder 
+The design config.tcl would have overwritten system defaults.
+To view the flooplan:
+go to:
+```bash
+cd Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/runs/17-09_10-53/results/floorplan
+```
+open the def file
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/floorplan2.png)
+
+Then we type the command:
+```bash
+magic -T /home/vsduser/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs.tech/magic/sky130A.tech lef read ../../tmp/merged.lef def read picorv32a.floorplan.def &
+```
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/magic1.png)
+
+#### Review floorplan layout in Magic
+Click s and v to bring it to center
+Left and right click to create a box
+Click z to zoom
+Click s and type what in the tkcon window to know the cell
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/magic2.png)
+
+### Library Binding and Placement
+#### Netlist binding and initial place design
+Library consists of various kinds of cells which have different shapes and sizes, flavours and different timing information.
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/Screenshot%202023-09-17%20170605.png)
+
+#### Optimize placement using estimated wire-length and capacitance
+The components of the netlist are placed in the core area according to the convenience of distance from the pins.
+Signal integrity is maintained by repeaters
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/Screenshot%202023-09-17%20170925.png)
+
+#### Final placement optimization
+Based on timing analysis we check if the placements meets the given specifications.
+The placements include thr buffers(repeaters) and other blocks of the design.
+(Setup timing analysis)
+
+#### Need for libraries and characterisation
+Typical IC design flow:
+Logic synthesis
+Floorplan(from the netlist of logic design)
+Placement(so that initial timing is reduced)
+CTS: Clock tree synthesis(clock should reach at the same time)
+Routing
+STA: static timing analysis
+
+One thing common among all stages: Gates or Cells.
+
+#### Congestion aware placement using Replace
+Global and detailed placement
+For global placement we run the run_placement command
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/placement.png)
+Then type
+```bash
+magic -T /home/vsduser/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs.tech/magic/sky130A.tech lef read ../../tmp/merged.lef def read picorv32a.placement.def &
+```
+![Alt text]https://github.com/aishwarya-2511/pes_pd/blob/main/images/placement2.png)
+
+### Cell design and characterization flows
+#### Inputs for cell design flow
+Cell design flow refers to the process of creating and optimizing individual digital logic cells that are part of a standard cell library. These libraries contain a set of pre-designed, characterized, and reusable logic gates, flip-flops, and other basic building blocks used in the design of integrated circuits. These libraries include PDK, DRC and LVS rules, SPICE models, libraries, user-defined specifications. User derfined specifications like Pin location, drawn gate lenght are added to the libarary by the library developer.
+
+Cell design flow:
+Inputs -> Process design kits(PDKs) : DRC and LVS rules, SPICE models, library and user-defined specs.
+Design Steps -> Circuit Design, Layout Design(Euler Path and Stick Diagram), Characterization.
+Outputs -> CDL(Circuit Description Language), GDSII, LEF, extracted spice netlist(.cir)
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/Screenshot%202023-09-17%20175056.png)
+#### Circuit design Step
+Implement function using NMOS and PMOS and then derive the network graph. Derive the Euler's path and stick diagram from the graph.
+Model the circuit based on requirements
+Output is a CDL(circuit description language) file
+
+#### Layout design Step
+Convert stick diagram according to the DRC rules Extraction of parasitics,extracted spice list
+
+
+#### Typical characterzation flow
+Timing ,noise power.libs functions Read in the models and tech files and generate extracted spice Netlist. Read the subcircuits and attach power sources. 
+
+### General timing characterization parameters
+#### Timing threshold definitions
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/Screenshot%202023-09-17%20175553.png)
+
+#### Propagation delay and transition time
+Propagation delay=time(out_fall_thr)-time(in_rise_thr)
+Choice of threshold should be so that delay is positive
+
+Rise transition time = time(slew_high_rise_thr) - time (slew_low_rise_thr)
+Fall transition time = time(slew_high_fall_thr) - time (slew_low_fall_thr)
