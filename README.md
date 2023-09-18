@@ -695,3 +695,28 @@ Final report
 ![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/Screenshot%202023-09-18%20192818.png)
 
 
+
+## DAY 5
+### Power Distribution Network and Routing
+#### Build Power Distribution Network
+To do this first we type ```gen_pdn```
+
+To check for DRC errors we need to check the 'tritonRoute.drc' folder
+To extract the parasitics we use the SPEF Extraction.
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/Screenshot%202023-09-18%20233546.png)
+
+#### SPEF Extraction
+SPEF (Standard Parasitic Exchange Format), is a standard file format used in the semiconductor industry to represent parasitic information for integrated circuits. Parasitic elements, such as resistance and capacitance, can significantly affect the performance of a circuit, so accurate modeling and extraction of these parasitics are crucial for designing and optimizing electronic devices.After routing has been completed interconnect parasitics can be extracted into a SPEF file. 
+
+To use this engine we need to go to
+```bash 
+cd Desktop/work/tools/SPEF_Extractor
+```
+Next we need to use this command
+```bash
+python3 /home/vsduser/Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/runs/16-09_19-58/tmp/merged.lef /home/vsduser/Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/runs/16-09_19-58/results/routing/picorv32a.def
+```
+SPEF file is created in :
+```bash
+/home/vsduser/Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/runs/16-09_19-58/results/routing/
+```
