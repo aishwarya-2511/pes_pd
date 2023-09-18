@@ -51,10 +51,8 @@ Design library cell using Magic layout and ngspice characterization
 * Labs for CMOS inverter ngspice simulations
     * IO place revision
     * SPICE deck creation for CMOS inverter
-    * SPICE simulation lab for CMOS inverter
     * Switching Threshold Vm
-    * Static dynamic simulation of CMOS inverter
-    * Lab steps to git clone vsdstdcelldesgin
+    * Lab steps to git clone vsdstdcelldesign
 * Inception of layout and CMOS fabrication process
     * Create active regions
     * Formation of N and P well 
@@ -352,3 +350,168 @@ Choice of threshold should be so that delay is positive
 
 Rise transition time = time(slew_high_rise_thr) - time (slew_low_rise_thr)
 Fall transition time = time(slew_high_fall_thr) - time (slew_low_fall_thr)
+## DAY 3
+Design library cell using Magic layout and ngspice characterization
+### Labs for CMOS inverter ngspice simulations
+#### IO place revision
+If we want to change the input output pin placement
+Originally, the IO pins were equi spaced
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/original%20io.png)
+To change, execute this in openlane:
+```bash
+set ::env(FP_IO_MODE) 3
+```
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/Screenshot%202023-09-17%20181829.png)
+
+#### SPICE deck creation for CMOS inverter
+Component connectivity
+Component values
+Identify nodes
+Name nodes
+Spice deck contains the netlist description of the nodes (D,G,S,S) in between which the component lies, and its W/L ratio.
+!{Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/Screenshot%202023-09-17%20183321.png)
+
+#### Switching Threshold Vm
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/Screenshot%202023-09-17%20183751.png)
+CMOS is a robust device.
+Switching threshold is a point where Vin=Vout
+Both nmos and pmos are in saturation
+
+#### Lab steps to git clone vsdstdcelldesign
+```bash
+git clone https://github.com/nickson-jose/vsdstdcelldesign
+```
+then 
+```bash
+magic -T sky130A.tech sky130_inv.mag &
+```
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/git.png)
+
+### Inception of layout and CMOS fabrication process
+#### Create active regions
+16 mask process:
+* Slect a substrate(p or n type) based on resistivity and doping level
+* Create active region for transistors: to isolate the active regions for transistors SiO2 and Si3N2 deposited. Pockets created using photoresist and lithography.
+
+#### Formation of N and P well 
+* P-well formation involves photolithography and ion implantation of p-type Boron material into the p-substrate.N-well is formed similarly with n-type Phosphorus material.Drive in diffusion by placing it in a high temperature furnace.
+
+#### Formation of gate terminal
+* A polysilicon layer is deposited and photolithography techniques are applied to create NMOS and PMOS gates.
+
+#### Lightly doped drain formation
+LDD done to avoid hot electron effect and short channel effect.
+
+#### Source and drain formation 
+Thin oxide layers are added to avoid channel effects during ion implantation.N+ and P+ implants are performed using Arsenic implantation and high-temperature annealing.
+
+#### Local interconnect formation
+Thin screen oxide is removed through etching in HF solution.Titanium deposition through sputtering is initiated. Heat treatment results in chemical reactions, producing low-
+resistant titanium silicon dioxide for interconnect contacts and titanium nitride for top-level connections, enabling local communication.
+
+#### Higher level metal formation
+To achieve suitable metal interconnects, non-planar surface topography is addressed.Chemical Mechanical Polishing (CMP) is utilized by doping silicon oxide with Boron or Phosphorus to achieve surface planarization.
+
+#### Lab introduction to Sky130 basic layers layout and LEf using inverter
+To look at the layout of a CMOS inverter, we type the command
+```bash
+magic -T sky130A.tech sky130_inv.mag &
+```
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/Screenshot%202023-09-18%20092311.png)
+
+Pressing 's' three times will show what parts are connected to the selected part.
+
+#### Lab steps to create std cell layout and extract spice Netlist
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/Screenshot%202023-09-18%20103458.png)
+
+Commands:
+```bash
+ext2spice cthresh 0 rthresh 0 -> this is done to copy the parasitic capacitances
+ext2spice
+```
+
+### Sky130 tech File Labs
+#### Labs to create final SPICE deck using Sky130 tech
+We can use 'g' on the keyboard to activate the grid and after selecting a grid by right clicking on the mouse, we type box in tkcon window to check the minimum value of the layout window.
+
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/Screenshot%202023-09-18%20183213.png)
+
+open the spice file using the command
+```bash
+gedit sky130_inv.spice
+```
+
+#### Lab steps to characterize inverter using sky130 model files
+To plot the graph for output vs input sweeping the time
+```bash
+ngspice sky130_inv.spice
+```
+In the ngspice shell we use the command
+```bash
+plot y vs time a
+```
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/Screenshot%202023-09-18%20183444.png)
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/Screenshot%202023-09-18%20183458.png)
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/Screenshot%202023-09-18%20183504.png)
+
+Rise Time = 0.006675e-09 s
+Propogation Delay = 0.06379e-09 s
+
+#### Lan introduction to Sky130 pdk's and steps to download Labs
+To download:
+```bash
+wget http://opencircuitdesign.com/open_pdks/archive/drc_tests.tgz
+```
+Move the file to desktop using:
+```bash
+mv drc_tests.tgz Desktop/
+```
+Extract the file using
+```bash
+tar xfz drc_tests.tgz 
+```
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/downloadandmove.png)
+To open it
+```bash
+magic -d XR
+````
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/openmagic.png)
+
+#### Lab introduction to Magic and steps to load Sky130 tech-rules
+open the 'met3.mag' file.
+If we select an area and type drc why in the tkcon wndow, it will show us the DRC error.
+
+#### Lab exercise to fix poly.9 error in Sky130 tech-file
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/Screenshot%202023-09-18%20184631.png)
+
+Now open the tkcon window and type
+```bash 
+load tech sky130A.tech
+drc check 
+```
+
+#### Lab challenge to describeDRC error as geometrical construct 
+We open the nwell.mag file
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/Screenshot%202023-09-18%20184755.png)
+
+this is displayed
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/Screenshot%202023-09-18%20184808.png)
+
+#### Lab challenge to find missing or incorrect rules and fix them
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/Screenshot%202023-09-18%20184854.png)
+
+make these changes:
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/Screenshot%202023-09-18%20184906.png)
+
+Now we select the nwell.4 and type the following commands
+```bash
+tech load sky130A.tech
+drc check
+drc style drc(full)
+drc check
+```
+error is still there.
+Fix :
+Select the existing nwell.4 and make a copy of it by selecting it and clicking 'c'.
+Now select a small area on the nwell.4 and add an 'nsubstratecontact' by hovering over it and clicking middle mouse button.
+
