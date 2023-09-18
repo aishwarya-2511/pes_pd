@@ -657,6 +657,9 @@ run_cts
 
 
 ### Clock tree synthesis TritonCTS and signal integrity
+#### Timing Analysis with Real CLocks using OpenSTA
+To run CTS we need to type the command ```run_cts```
+
 #### Post CTS- STA Analysis
 OpenSTA is an open-source static timing analysis tool that is commonly used in digital circuit design. STA is a critical step in the design and verification of digital circuits, ensuring that the circuit meets its timing requirements. OpenSTA is part of the larger OpenROAD open-source RTL-to-GDSII flow, which provides a complete ASIC design environment.
 Steps:
@@ -680,6 +683,10 @@ read_liberty -max $::env(LIB_FASTEST)
 set_propagated_clock [all_clocks]
 report_checks -path_delay min_max -format full_clock_expanded -digits 4
 ```
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/Screenshot%202023-09-18%20232925.png)
+
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/Screenshot%202023-09-18%20232932.png)
+
 The timing results wont meet our expectations due to the utilization of minimum and maximum library files which OpenRoad does not currently support for multi-corner optimization. Hence we do it using only typical corner lib
 
 We perform it again for a more accurate result
