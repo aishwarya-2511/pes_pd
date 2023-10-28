@@ -315,7 +315,7 @@ Then type
 ```bash
 magic -T /home/vsduser/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs.tech/magic/sky130A.tech lef read ../../tmp/merged.lef def read picorv32a.placement.def &
 ```
-![Alt text]https://github.com/aishwarya-2511/pes_pd/blob/main/images/placement2.png)
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/placement2.png)
 
 ### Cell design and characterization flows
 #### Inputs for cell design flow
@@ -367,7 +367,7 @@ Component values
 Identify nodes
 Name nodes
 Spice deck contains the netlist description of the nodes (D,G,S,S) in between which the component lies, and its W/L ratio.
-!{Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/Screenshot%202023-09-17%20183321.png)
+![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/Screenshot%202023-09-17%20183321.png)
 
 #### Switching Threshold Vm
 ![Alt text](https://github.com/aishwarya-2511/pes_pd/blob/main/images/Screenshot%202023-09-17%20183751.png)
